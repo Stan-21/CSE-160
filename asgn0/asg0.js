@@ -66,4 +66,12 @@ function handleDrawOperationEvent() {
     drawVector(v1.div(document.getElementById('scalar').value), "green");
     drawVector(v2.div(document.getElementById('scalar').value), "green");
   } 
+  if (document.getElementById('operation').value == "magnitude") {
+    console.log("Magnitude v1: " + v1.magnitude());
+    console.log("Magnitude v2: " + v2.magnitude());
+  }
+  if (document.getElementById('operation').value == "normalize") {
+    drawVector(v1.normalize(), "green");
+    drawVector(v2.normalize(), "green");
+  }
 }
