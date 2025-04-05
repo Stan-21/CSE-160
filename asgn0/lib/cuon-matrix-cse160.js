@@ -102,6 +102,9 @@ class Vector3 {
     static dot(other1, other2) {
         // Insert your code here.
         let d = 0; // Modify this line to calculate this vector's magnitude.
+        for (let i = 0; i < other1.elements.length; i++) {
+          d += (other1.elements[i] * other2.elements[i]);
+        }
         // Don't delete the return statement.
         return d;
     }
@@ -114,7 +117,9 @@ class Vector3 {
         // Insert your code here.
         // This function should create and return a new vector.
         let v3 = new Vector3(); // Modify this line to calculate cross product between other1 and other2.
-
+        v3.elements[0] = (other1.elements[1] * other2.elements[2]) - (other1.elements[2] * other2.elements[1]);
+        v3.elements[1] = (other1.elements[2] * other2.elements[0]) - (other1.elements[0] * other2.elements[2]);
+        v3.elements[2] = (other1.elements[0] * other2.elements[1]) - (other1.elements[1] * other2.elements[0]);
         // Don't delete the return statement.
         return v3;
     }
@@ -126,7 +131,7 @@ class Vector3 {
     magnitude() {
         // Insert your code here.
         let m = 0; // Modify this line to calculate this vector's magnitude.
-        for (let i = 0; i < this.elements.length - 1; i++) {
+        for (let i = 0; i < this.elements.length; i++) {
           m += (this.elements[i] * this.elements[i]);
         }
         m = Math.sqrt(m);

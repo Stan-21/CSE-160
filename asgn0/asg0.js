@@ -35,9 +35,9 @@ function handleDrawEvent() {
   ctx.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight);
   ctx.fillRect(0, 0, canvas.clientWidth, canvas.clientHeight);
 
-  var v1 = new Vector3([document.getElementById('x1').value, document.getElementById('y1').value]);
+  var v1 = new Vector3([document.getElementById('x1').value, document.getElementById('y1').value, 0]);
   drawVector(v1, "red");
-  var v2 = new Vector3([document.getElementById('x2').value, document.getElementById('y2').value]);
+  var v2 = new Vector3([document.getElementById('x2').value, document.getElementById('y2').value, 0]);
   drawVector(v2, "blue");
 }
 
@@ -48,9 +48,9 @@ function handleDrawOperationEvent() {
   ctx.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight);
   ctx.fillRect(0, 0, canvas.clientWidth, canvas.clientHeight);
 
-  var v1 = new Vector3([document.getElementById('x1').value, document.getElementById('y1').value]);
+  var v1 = new Vector3([document.getElementById('x1').value, document.getElementById('y1').value, 0]);
   drawVector(v1, "red");
-  var v2 = new Vector3([document.getElementById('x2').value, document.getElementById('y2').value]);
+  var v2 = new Vector3([document.getElementById('x2').value, document.getElementById('y2').value, 0]);
   drawVector(v2, "blue");
   if (document.getElementById('operation').value == "add") {
     drawVector(v1.add(v2), "green");
@@ -65,7 +65,13 @@ function handleDrawOperationEvent() {
   if (document.getElementById('operation').value == "divide") {
     drawVector(v1.div(document.getElementById('scalar').value), "green");
     drawVector(v2.div(document.getElementById('scalar').value), "green");
-  } 
+  }
+  if (document.getElementById('operation').value == "angle") {
+    console.log("Angle: " + angleBetween(v1, v2));
+  }
+  if (document.getElementById('operation').value == "area") {
+    console.log("Area of the triangle: " + areaTriangle(v1, v2));
+  }
   if (document.getElementById('operation').value == "magnitude") {
     console.log("Magnitude v1: " + v1.magnitude());
     console.log("Magnitude v2: " + v2.magnitude());
@@ -74,4 +80,12 @@ function handleDrawOperationEvent() {
     drawVector(v1.normalize(), "green");
     drawVector(v2.normalize(), "green");
   }
+}
+
+function angleBetween(v1, v2) {
+  return Math.acos(Vector3.dot(v1, v2) / (v1.magnitude() * v2.magnitude())) * (180 / Math.PI);
+}
+
+function areaTriangle(v1, v2) {
+  return Vector3.cross(v1, v2).magnitude() / 2;
 }
