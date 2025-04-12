@@ -74,9 +74,14 @@ function connectVariablesToGLSL() {
   }
 }
 
+var rainbow = false;
+let intervalId;
+
 function addActionsForHTMLUI() {
   // Button Events
-  document.getElementById('clearCanvas').addEventListener('click', function() { g_shapesList = []; renderAllShapes()});
+  document.getElementById('clearCanvas').addEventListener('click', function() { g_shapesList = []; renderAllShapes();});
+  document.getElementById('Oshawott').addEventListener('click', function() { oshawott(); });
+
   document.getElementById('pointButton').addEventListener('click', function() { g_selectedType = POINT});
   document.getElementById('triButton').addEventListener('click', function() { g_selectedType = TRIANGLE});
   document.getElementById('circleButton').addEventListener('click', function() {g_selectedType = CIRCLE});
@@ -87,6 +92,164 @@ function addActionsForHTMLUI() {
 
   document.getElementById('shapeSlide').addEventListener('mouseup', function() { g_selectedSize = this.value;});
   document.getElementById('circleSlide').addEventListener('mouseup', function() { g_selectedSegment = this.value;});
+}
+
+function oshawott() {
+  g_shapesList = []; // Clearing canvas
+  renderAllShapes();
+  let point = new Triangle();
+
+  point.color = [0, 0.8, 0.8, 1.0];
+  point.points = [-2, 1, 2, 1, -2, -2];
+  g_shapesList.push(point);
+  point = new Triangle();
+  point.color = [0, 0.8, 0.8, 1.0];
+  point.points = [-2, -2, 2, 1, 2, -2];
+  g_shapesList.push(point);
+
+
+  point = new Triangle();
+  point.points = [-2, 4, 2, 4, -2, 1];
+  g_shapesList.push(point);
+  point = new Triangle();
+  point.points = [-2, 1, 2, 4, 2, 1];
+  g_shapesList.push(point);
+  point = new Triangle();
+  point.points = [-2, 4, 0, 4.5, 2, 4];
+  g_shapesList.push(point);
+
+  point = new Triangle(); // Ears
+  point.color = [0.3, 0.4, 1.0, 1.0];
+  point.points = [-2, 4, -2.5, 4, -2, 3];
+  g_shapesList.push(point);
+  point = new Triangle();
+  point.color = [0.3, 0.4, 1.0, 1.0];
+  point.points = [2, 4, 3, 3.5, 2, 3];
+  g_shapesList.push(point);
+
+  point = new Triangle();
+  point.color = [0.3, 0.4, 1.0, 1.0];
+  point.points = [-1, -2, -1, -3, -2, -3];
+  g_shapesList.push(point);
+  point = new Triangle();
+  point.color = [0.3, 0.4, 1.0, 1.0];
+  point.points = [1, -2, 1, -3, 2, -3];
+  g_shapesList.push(point);
+
+  point = new Triangle();
+  point.color = [0.3, 0.4, 1.0, 1.0];
+  point.points = [2, -1, 3, -1, 2, -2];
+  g_shapesList.push(point);
+
+  point = new Triangle();
+  point.color = [0, 0.8, 0.8, 1.0];
+  point.points = [-2, -2, 0, -2.5, 2, -2];
+  g_shapesList.push(point);
+
+  point = new Triangle();
+  point.points = [-2, 1, -2.5, 2, -2, 4];
+  g_shapesList.push(point);
+  point = new Triangle();
+  point.points = [2, 4, 2, 1, 2.5, 2.5];
+  g_shapesList.push(point);
+
+  point = new Triangle();
+  point.points = [-2, 0, -2, 1, -3, 1];
+  g_shapesList.push(point);
+  point = new Triangle();
+  point.points = [2, 1, 2, 0, 3, 0];
+  g_shapesList.push(point);
+
+  point = new Triangle();
+  point.points = [-2, 1, -1, 1, -1.5, 0.5];
+  g_shapesList.push(point);
+  point = new Triangle();
+  point.points = [-1, 1, 0, 1, -0.5, 0.5];
+  g_shapesList.push(point);
+  point = new Triangle();
+  point.points = [2, 1, 1, 1, 1.5, 0.5];
+  g_shapesList.push(point);
+  point = new Triangle();
+  point.points = [1, 1, 0, 1, 0.5, 0.5];
+  g_shapesList.push(point);
+
+  point = new Triangle(); // Nose
+  point.color = [0.58, 0.25, 0.0, 1];
+  point.points = [0, 3, -1, 3, -0.5, 2.5];
+  g_shapesList.push(point);
+
+  point = new Triangle(); // Shell
+  point.color = [1.0, 1.0, 0.5, 1];
+  point.points = [0, 0, -1, 0, -1, -1.5];
+  g_shapesList.push(point);
+  point = new Triangle();
+  point.color = [1.0, 1.0, 0.5, 1];
+  point.points = [0, 0, 0, -1.5, -1, -1.5];
+  g_shapesList.push(point);
+  point = new Triangle();
+  point.color = [1.0, 1.0, 0.5, 1];
+  point.points = [0, 0, 0, -1, 0.25, -0.5];
+  g_shapesList.push(point);
+  point = new Triangle();
+  point.color = [1.0, 1.0, 0.5, 1];
+  point.points = [-1, 0, -1.25, -0.5, -1, -1];
+  g_shapesList.push(point); 
+
+  point = new Triangle(); // Right Eye
+  point.color = [0.0, 0.0, 0.0, 1];
+  point.points = [0.75, 3, 1, 3.25, 0.75, 3.5];
+  g_shapesList.push(point);
+  point = new Triangle();
+  point.color = [0.0, 0.0, 0.0, 1];
+  point.points = [0.75, 3, 0.5, 3.25, 0.75, 3.5];
+  g_shapesList.push(point);
+
+  point = new Triangle(); // Left Eye
+  point.color = [0.0, 0.0, 0.0, 1];
+  point.points = [-1.25, 3, -1, 3.25, -1.25, 3.5];
+  g_shapesList.push(point);
+  point = new Triangle();
+  point.color = [0.0, 0.0, 0.0, 1];
+  point.points = [-1.25, 3, -1.5, 3.25, -1.25, 3.5];
+  g_shapesList.push(point);
+
+  point = new Triangle(); // Mouth
+  point.color = [0.0, 0.0, 0.0, 1];
+  point.points = [-0.5, 2, -1, 1.5, 0, 1.5];
+  g_shapesList.push(point);
+  point = new Triangle();
+  point.color = [1.0, 1.0, 1.0, 1];
+  point.points = [-0.5, 1.9, -1, 1.5, 0, 1.5];
+  g_shapesList.push(point);
+
+  point = new Triangle(); // Left Freckles
+  point.color = [0.0, 0.0, 0.0, 1];
+  point.points = [-2, 2.1, -1.9, 2.1, -1.95, 2];
+  g_shapesList.push(point);
+  point = new Triangle();
+  point.color = [0.0, 0.0, 0.0, 1];
+  point.points = [-1.5, 2, -1.4, 2, -1.45, 1.9];
+  g_shapesList.push(point);
+  point = new Triangle();
+  point.color = [0.0, 0.0, 0.0, 1];
+  point.points = [-1.8, 1.8, -1.7, 1.8, -1.75, 1.7];
+  g_shapesList.push(point);
+
+  point = new Triangle(); // Right Freckles
+  point.color = [0.0, 0.0, 0.0, 1];
+  point.points = [1, 1.6, 1.1, 1.6, 1.05, 1.5];
+  g_shapesList.push(point);
+  point = new Triangle();
+  point.color = [0.0, 0.0, 0.0, 1];
+  point.points = [0.9, 1.8, 1.0, 1.8, 0.95, 1.7];
+  g_shapesList.push(point);
+  point = new Triangle();
+  point.color = [0.0, 0.0, 0.0, 1];
+  point.points = [1.2, 1.8, 1.3, 1.8, 1.25, 1.7];
+  g_shapesList.push(point);
+
+  renderAllShapes();
+
 }
 
 function main() {

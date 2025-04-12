@@ -4,6 +4,7 @@ class Triangle {
         this.position = [0.0, 0.0, 0.0];
         this.color = [1.0, 1.0, 1.0, 1.0];
         this.size = 5.0;
+        this.points = [];
     }
 
     render() {
@@ -18,8 +19,14 @@ class Triangle {
         // Pass the size of a point to u_Size variable
         gl.uniform1f(u_Size, size)
         // Draw
-        var d = this.size / 200.0;
-        drawTriangle([xy[0], xy[1], xy[0]+d, xy[1], xy[0], xy[1]+d]);
+        if (this.points.length == 0) {
+            var d = this.size / 200.0; // maybe could move stuff above to if statements?
+            drawTriangle([xy[0], xy[1], xy[0]+d, xy[1], xy[0], xy[1]+d]);
+        } else {
+            drawTriangle([this.points[0] / this.size, this.points[1] / this.size - 0.1, this.points[2] / this.size,
+                this.points[3] / this.size - 0.1, this.points[4] / this.size, this.points[5] / this.size - 0.1]
+            );
+        }
     }
 }
 
