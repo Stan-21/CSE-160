@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>Change a point color</title>
+    <title>Painting!</title>
   </head>
 
   <body onload="main()">
@@ -10,6 +10,16 @@
     Please use a browser that supports "canvas"
     </canvas>
 
+    <p id="numdot"> XXX </p>
+
+    <p>
+      <button type="button" id="clearCanvas">Clear Canvas</button>
+    </p>
+    <p>
+      <button type="button" id="pointButton">Point</button>
+      <button type="button" id="triButton">Triangle</button>
+      <button type="button" id="circleButton">Circle</button>
+    </p>
     <p>Shape Color:</p>
     <div class="slidecontainer">
       Red<input type="range" min="0" max="100" value="50" class="slider" id="redSlide">
@@ -18,11 +28,14 @@
     </div>
     <div class="slidecontainer">
       Shape Size:<input type="range" min="5" max="40" value="10" class="slider" id="shapeSlide">
+      (Circles) Segment Count:<input type="range" min="5" max="40" value="10" class="slider" id="circleSlide">
     </div>
     <script src="lib/webgl-utils.js"></script>
     <script src="lib/webgl-debug.js"></script>
     <script src="lib/cuon-utils.js"></script>
     <script src="Point.js"></script>
+    <script src="Circle.js"></script>
+    <script src="Triangle.js"></script>
     <script src="asg1.js"></script>
   </body>
 </html>
