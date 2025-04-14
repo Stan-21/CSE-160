@@ -74,13 +74,17 @@ function connectVariablesToGLSL() {
   }
 }
 
-var rainbow = false;
-let intervalId;
+var intervalId;
+var cycle = false;
 
 function addActionsForHTMLUI() {
   // Button Events
   document.getElementById('clearCanvas').addEventListener('click', function() { g_shapesList = []; renderAllShapes();});
   document.getElementById('Oshawott').addEventListener('click', function() { oshawott(); });
+  document.getElementById('undo').addEventListener('click', function() { undo(); });
+  document.getElementById('redo').addEventListener('click', function() { redo(); });
+
+  document.getElementById('rainbow').addEventListener('click', function() { if (cycle == false) { intervalId = setInterval(rainbow, 50); cycle = true} else { clearInterval(intervalId); cycle = false; } });
 
   document.getElementById('pointButton').addEventListener('click', function() { g_selectedType = POINT});
   document.getElementById('triButton').addEventListener('click', function() { g_selectedType = TRIANGLE});
@@ -92,6 +96,40 @@ function addActionsForHTMLUI() {
 
   document.getElementById('shapeSlide').addEventListener('mouseup', function() { g_selectedSize = this.value;});
   document.getElementById('circleSlide').addEventListener('mouseup', function() { g_selectedSegment = this.value;});
+}
+
+var undone_Shapes = [];
+
+function rainbow() {
+  var startTime = performance.now();
+
+  // Clear <canvas>
+  gl.clear(gl.COLOR_BUFFER_BIT);
+
+  var len = g_shapesList.length;
+  for(var i = 0; i < len; i++) {
+    g_shapesList[i].cycleColors();
+    g_shapesList[i].render();
+  }
+
+  var duration = performance.now() - startTime;
+}
+
+function undo() {
+  if (g_shapesList.length > 0) {
+    undone_Shapes.push(g_shapesList.pop());
+  }
+
+  document.getElementById('redSlide').value = 0;
+  renderAllShapes();
+  
+}
+
+function redo() {
+  if (undone_Shapes.length > 0) {
+    g_shapesList.push(undone_Shapes.pop());
+  }
+  renderAllShapes();
 }
 
 function oshawott() {
@@ -292,6 +330,7 @@ function click(ev) {
   point.color = g_selectedColor.slice();
   point.size = g_selectedSize;
   g_shapesList.push(point);
+  undone_Shapes = [];
   /*// Store the coordinates to g_points array
   g_points.push([x, y]);
   // Store the colors to g_colors array
