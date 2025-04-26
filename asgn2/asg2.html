@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>Painting!</title>
+    <title>Blocky Animal!</title>
   </head>
 
   <body onload="main()">
@@ -11,33 +11,27 @@
     </canvas>
 
     <p id="numdot"> XXX </p>
-
+    <p> Animations:
+        <button type="button" id="animationOnButton">ON</button>
+        <button type="button" id="animationOffButton">OFF</button> 
     <p>
-      <button type="button" id="clearCanvas">Clear Canvas</button>
-      <button type="button" id="undo">Undo</button>
-      <button type="button" id="redo">Redo</button>
-      <button type="button" id="Oshawott">Oshawott!</button>
-      <button type="button" id="rainbow">Rainbow</button>
+      Camera Angle <input type="range" min="-90" max="90" value="0" class="slider" id="angleSlide">
     </p>
     <p>
-      <button type="button" id="pointButton">Point</button>
-      <button type="button" id="triButton">Triangle</button>
-      <button type="button" id="circleButton">Circle</button>
+      Left Shoulder <input type="range" min="-45" max="45" value="0" class="slider" id="leftShoulder">
+      Left Arm <input type="range" min="-45" max="45" value="0" class="slider" id="leftArm">
+      Left Hand <input type="range" min="-25" max="0" value="0" class="slider" id="leftHand">
     </p>
-    <p>Shape Color:</p>
-    <div class="slidecontainer">
-      Red<input type="range" min="0" max="100" value="50" class="slider" id="redSlide">
-      Green<input type="range" min="0" max="100" value="50" class="slider" id="greenSlide">
-      Blue<input type="range" min="0" max="100" value="50" class="slider" id="blueSlide">
-    </div>
-    <div class="slidecontainer">
-      Shape Size:<input type="range" min="5" max="40" value="10" class="slider" id="shapeSlide">
-      (Circles) Segment Count:<input type="range" min="5" max="40" value="10" class="slider" id="circleSlide">
-    </div>
+    <p>
+      Right Shoulder <input type="range" min="-45" max="45" value="0" class="slider" id="rightShoulder">
+      Right Arm <input type="range" min="-45" max="45" value="0" class="slider" id="rightArm">
+      Right Hand <input type="range" min="-25" max="0" value="0" class="slider" id="rightHand">
+    </p>
     <img src="oshawott.jpg" alt="Oshawott!" width="15%">
     <script src="lib/webgl-utils.js"></script>
     <script src="lib/webgl-debug.js"></script>
     <script src="lib/cuon-utils.js"></script>
+    <script src="lib/cuon-matrix.js"></script>
     <script src="Point.js"></script>
     <script src="Circle.js"></script>
     <script src="Triangle.js"></script>
