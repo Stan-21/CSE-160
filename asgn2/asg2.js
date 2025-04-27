@@ -81,7 +81,7 @@ function connectVariablesToGLSL() {
 
 }
 
-let animationOn = false;
+let animationOn = true;
 let pokeOn = false;
 
 
@@ -190,7 +190,7 @@ function main() {
   canvas.onmousemove = function(ev) { if(ev.buttons == 1) { click(ev) }};
 
   // Specify the color for clearing <canvas>
-  gl.clearColor(0.0, 0.0, 0.0, 1.0);
+  gl.clearColor(0.2, 0.2, 0.2, 1.0);
 
   // Clear <canvas>
   requestAnimationFrame(tick);
