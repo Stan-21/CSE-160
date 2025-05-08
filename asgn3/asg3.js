@@ -1,6 +1,7 @@
 // ColoredPoint.js (c) 2012 matsuda
 // Vertex shader program
 var VSHADER_SOURCE = `
+  precision mediump float;
   attribute vec4 a_Position;
   attribute vec2 a_UV;
   varying vec2 v_UV;
@@ -9,7 +10,7 @@ var VSHADER_SOURCE = `
   uniform mat4 u_viewMatrix;
   uniform mat4 u_ProjectionMatrix;
   void main() {
-    gl_Position = u_viewMatrix * u_ProjectionMatrix * u_GlobalRotateMatrix * u_ModelMatrix * a_Position;
+    gl_Position = u_ProjectionMatrix * u_viewMatrix * u_GlobalRotateMatrix * u_ModelMatrix * a_Position;
     v_UV = a_UV;
   }`
 
