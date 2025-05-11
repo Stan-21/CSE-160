@@ -3,37 +3,125 @@ class Cube {
         this.type = 'cube';
         this.color = [1.0, 1.0, 1.0, 1.0];
         this.matrix = new Matrix4();
+
+        this.textureNum = -2;
+
+        this.buffer = null;
+        this.vertices = null;
+        this.uv = null;
+
+        this.cubeVert = new Float32Array([
+            0,0,0, 1,1,0, 1,0,0,
+            0,0,0, 0,1,0, 1,1,0,
+            0.0,1.0,0.0,  0.0,1.0,1.0,  1.0,1.0,1.0,
+            0.0,1.0,0.0,  1.0,1.0,1.0,  1.0,1.0,0.0,
+            0.0,0.0,0.0,  0.0,0.0,1.0,  1.0,0.0,1.0,
+            0.0,0.0,0.0,  1.0,0.0,1.0,  1.0,0.0,0.0,
+            1.0,0.0,0.0,  1.0,1.0,0.0,  1.0,1.0,1.0,
+            1.0,0.0,0.0,  1.0,0.0,1.0,  1.0,1.0,1.0,
+            0.0,0.0,1.0,  0.0,1.0,1.0,  1.0,1.0,1.0,
+            0.0,0.0,1.0,  1.0,1.0,1.0,  1.0,0.0,1.0,
+            0.0,0.0,0.0,  0.0,1.0,0.0,  0.0,1.0,1.0,
+            0.0,0.0,0.0,  0.0,1.0,1.0,  0.0,0.0,1.0
+        ])
+
+        this.UV = new Float32Array([
+            0,0, 1,1, 1,0,
+            0,0, 0,1, 1,1,
+            1,0, 1,1, 0,1,
+            1,0, 0,1, 0,0,
+            1,0, 1,1, 0,1,
+            1,0, 0,1, 0,0,
+            0,0, 0,1, 1,1,
+            0,0, 1,0, 1,1,
+            0,0, 0,1, 1,1,
+            0,0, 1,1, 1,0,
+            0,0, 0,1, 1,1,
+            0,0, 1,1, 1,0
+        ]);
+    }
+
+    generateVertices() {
+        let v = [];
+        v.push(0,0,0, 1,1,0, 1,0,0); // BACK (POV BACK)
+        v.push(0,0,0, 0,1,0, 1,1,0);
+        v.push(0.0,1.0,0.0,  0.0,1.0,1.0,  1.0,1.0,1.0); // TOP
+        v.push(0.0,1.0,0.0,  1.0,1.0,1.0,  1.0,1.0,0.0);
+        v.push(0.0,0.0,0.0,  0.0,0.0,1.0,  1.0,0.0,1.0); // BOTTOM
+        v.push(0.0,0.0,0.0,  1.0,0.0,1.0,  1.0,0.0,0.0);
+
+        v.push(1.0,0.0,0.0,  1.0,1.0,0.0,  1.0,1.0,1.0); // RIGHT (POV BACK)
+        v.push(1.0,0.0,0.0,  1.0,0.0,1.0,  1.0,1.0,1.0);
+        v.push(0.0,0.0,1.0,  0.0,1.0,1.0,  1.0,1.0,1.0); // FRONT (POV BACK)
+        v.push(0.0,0.0,1.0,  1.0,1.0,1.0,  1.0,0.0,1.0);
+
+        v.push(0.0,0.0,0.0,  0.0,1.0,0.0,  0.0,1.0,1.0); // LEFT (POV BACK)
+        v.push(0.0,0.0,0.0,  0.0,1.0,1.0,  0.0,0.0,1.0);
+
+
+        this.vertices = new Float32Array(v);
+    }
+
+    generateUV(){
+        let u = [];
+        u.push(0,0, 1,1, 1,0); // BACK
+        u.push(0,0, 0,1, 1,1);
+        u.push(1,0, 1,1, 0,1); // TOP 
+        u.push(1,0, 0,1, 0,0);
+        u.push(1,0, 1,1, 0,1); // BOTTOM
+        u.push(1,0, 0,1, 0,0);
+
+        u.push(0,0, 0,1, 1,1); // RIGHT
+        u.push(0,0, 1,0, 1,1);
+        u.push(0,0, 0,1, 1,1); // FRONT (POV BACK)
+        u.push(0,0, 1,1, 1,0);
+        u.push(0,0, 0,1, 1,1); // LEFT
+        u.push(0,0, 1,1, 1,0);
+
+        this.uv = new Float32Array(u);
     }
 
     render() {
         var rgba = this.color;
+        
+        gl.uniform1i(u_whichTexture, this.textureNum);
         gl.uniform4f(u_FragColor, rgba[0], rgba[1], rgba[2], rgba[3]);
 
         gl.uniformMatrix4fv(u_ModelMatrix, false, this.matrix.elements);
 
-        drawTriangle3DUV([0,0,0, 1,1,0, 1,0,0], [0,0, 1,1, 1,0]);
-        drawTriangle3DUV([0,0,0, 0,1,0, 1,1,0], [0,0, 0,1, 1,1]);
-        drawTriangle3D([0.0,0.0,0.0,  0.0,1.0,0.0,  1.0,1.0,0.0]);
-        drawTriangle3D([0.0,0.0,0.0,  1.0,1.0,0.0,  1.0,0.0,0.0]);
+        /*if (this.vertices === null) {
+            this.generateVertices();
+        }*/
 
-        gl.uniform4f(u_FragColor, rgba[0]*0.9, rgba[1]*0.9, rgba[2]*0.9, rgba[3]);
-        drawTriangle3D([0.0,1.0,0.0,  0.0,1.0,1.0,  1.0,1.0,1.0]);
-        drawTriangle3D([0.0,1.0,0.0,  1.0,1.0,1.0,  1.0,1.0,0.0]);
+        /*if (this.uv === null) {
+            this.generateUV();
+        }*/
 
-        gl.uniform4f(u_FragColor, rgba[0]*0.8, rgba[1]*0.8, rgba[2]*0.8, rgba[3]);
-        drawTriangle3D([0.0,0.0,0.0,  0.0,0.0,1.0,  1.0,0.0,1.0]);
-        drawTriangle3D([0.0,0.0,0.0,  1.0,0.0,1.0,  1.0,0.0,0.0]);
+        if (this.buffer === null) {
+            this.buffer = gl.createBuffer();
+        }
+      
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
+      
+        gl.bufferData(gl.ARRAY_BUFFER, this.cubeVert, gl.DYNAMIC_DRAW);
+      
+        gl.vertexAttribPointer(a_Position, 3, gl.FLOAT, false, 0, 0);
+        gl.enableVertexAttribArray(a_Position);
+        gl.drawArrays(gl.TRIANGLES, 0, 36);
 
-        gl.uniform4f(u_FragColor, rgba[0]*0.7, rgba[1]*0.7, rgba[2]*0.7, rgba[3]);
-        drawTriangle3D([1.0,0.0,0.0,  1.0,1.0,0.0,  1.0,1.0,1.0]);
-        drawTriangle3D([1.0,0.0,0.0,  1.0,0.0,1.0,  1.0,1.0,1.0]);
+        var uvBuffer = gl.createBuffer();
+        if (!uvBuffer) {
+          console.log('Failed to create the buffer object');
+          return -1;
+        }
 
-        gl.uniform4f(u_FragColor, rgba[0]*0.6, rgba[1]*0.6, rgba[2]*0.6, rgba[3]);
-        drawTriangle3D([0.0,0.0,1.0,  0.0,1.0,1.0,  1.0,1.0,1.0]);
-        drawTriangle3D([0.0,0.0,1.0,  1.0,1.0,1.0,  1.0,0.0,1.0]);
+        gl.bindBuffer(gl.ARRAY_BUFFER, uvBuffer);
+        gl.bufferData(gl.ARRAY_BUFFER, this.UV, gl.DYNAMIC_DRAW);
+        gl.vertexAttribPointer(a_UV, 2, gl.FLOAT, false, 0, 0);
+        gl.enableVertexAttribArray(a_UV);
+      
+        gl.drawArrays(gl.TRIANGLES, 0, 36);
 
-        gl.uniform4f(u_FragColor, rgba[0]*0.5, rgba[1]*0.5, rgba[2]*0.5, rgba[3]);
-        drawTriangle3D([0.0,0.0,0.0,  0.0,1.0,0.0,  0.0,1.0,1.0]);
-        drawTriangle3D([0.0,0.0,0.0,  0.0,1.0,1.0,  0.0,0.0,1.0]);
-    }
+   }
+
 }
