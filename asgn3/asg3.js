@@ -29,6 +29,9 @@ var FSHADER_SOURCE = `
       gl_FragColor = vec4(v_UV,1.0,1.0);
     } else if (u_whichTexture == 0) {
       gl_FragColor = texture2D(u_Sampler0, v_UV);
+      if (gl_FragColor.a < 0.5) {
+        discard;
+      }
     } else if (u_whichTexture == 1) {
       gl_FragColor = texture2D(u_Sampler1, v_UV);
     } else {
@@ -152,7 +155,7 @@ function initTextures() {
   image1.onload = function(){ sendTextureToTEXTURE1(image1); };
   // Tell the browser to load an image
   image0.src = 'sky.jpg';
-  image1.src = 'plastered_wall_04_diff_4k.jpg';
+  image1.src = 'cheren.jpg';
 
   return true;
 }
@@ -200,14 +203,14 @@ function sendTextureToTEXTURE1(image) {
 }
 
 
-let animationOn = false;
+let animationOn = true;
 let pokeOn = false;
 
 
 function addActionsForHTMLUI() {
 
-  document.getElementById('animationOnButton').onclick = function() {camera.moveLeft(); };
-  document.getElementById('animationOffButton').onclick = function() {camera.moveRight(); };
+  document.getElementById('animationOnButton').onclick = function() {animationOn = true; };
+  document.getElementById('animationOffButton').onclick = function() {animationOn = false; };
 }
 
 function reset() {
@@ -329,7 +332,7 @@ function click(ev) {
   let x = 16 - Math.ceil(camera.at.elements[0]);
   let y = 16 - Math.ceil(camera.at.elements[2]);
   if ((x <= 31) && (y <= 31)) {
-    if (map[y][x] > 0) {
+    if (map[y][x] != 0) {
       map[y][x] = 0;
     } else if (map[y][x] == 0) {
       if (camera.at.elements[1] <= 0) {
@@ -390,7 +393,7 @@ let rightHandZ = 0;
 function updateAnimationAngles() {
   if (animationOn && !pokeOn) {
     reset();
-    leftLegX = 5*Math.sin(8*g_seconds);
+    /*leftLegX = 5*Math.sin(8*g_seconds);
     rightLegX = -5*Math.sin(8*(g_seconds));
     leftLegY = 2*Math.sin(3 * g_seconds);
     rightLegY = -2*Math.sin(3 * g_seconds);
@@ -404,9 +407,9 @@ function updateAnimationAngles() {
 
     tailX = 35*Math.sin(4*g_seconds);
     headX = (5*Math.sin(4*g_seconds)); 
-    headY = (5*Math.sin(g_seconds));
+    headY = (5*Math.sin(g_seconds));*/
 
-    /*tailY = (35*Math.sin(g_seconds));
+    tailY = (35*Math.sin(g_seconds));
     tailX = (20*Math.sin(g_seconds));
     headX = (5*Math.sin(g_seconds)); 
     headY = (5*Math.sin(g_seconds));
@@ -415,7 +418,7 @@ function updateAnimationAngles() {
     leftArmX = (5*Math.sin(g_seconds));
     leftArmY = (20*Math.sin(g_seconds));
     leftHandY = (45*Math.sin(g_seconds));
-    rightShoulderX = (10*Math.sin(g_seconds));*/
+    rightShoulderX = (10*Math.sin(g_seconds));
 
     //Poke animation maybe?
     /*leftShoulderY = 30;
@@ -561,7 +564,7 @@ function renderAllShapes() {
   body.matrix.rotate(bodyY, 0, 1, 0);
   body.matrix.rotate(bodyZ, 0, 0, 1);
   body.matrix.scale(0.7, 0.8, 0.5);
-  body.matrix.translate(0, 1.4, 0);
+  body.matrix.translate(0, 1.4, 12);
   var bodyRef = new Matrix4(body.matrix);
   body.render();
 
@@ -798,7 +801,6 @@ function renderAllShapes() {
 
   var floor = new Cube();
   floor.color = [0.76, 0.64, 0.51, 1.0];
-  floor.textureNum = 1;
   floor.matrix.translate(0, -0.75, 0.0);
   floor.matrix.scale(32, 0, 32);
   floor.matrix.translate(-0.5, 0, -0.5);
@@ -811,6 +813,13 @@ function renderAllShapes() {
   sky.matrix.scale(32,32,32);
   sky.matrix.translate(-.5,0,-0.5);
   sky.render();
+
+  var cheren = new Cube();
+  cheren.textureNum = 1;
+  cheren.matrix.translate(0,0,-12);
+  cheren.matrix.scale(4,4,0);
+  cheren.matrix.translate(-.5,0,-.5);
+  cheren.render();
 
 
   var duration = performance.now() - startTime;
