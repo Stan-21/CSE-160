@@ -22,87 +22,17 @@
   </head>
 
   <body onload="main()">
-    <canvas id="webgl" width="400" height="400">
+    <canvas id="webgl" width="800" height="800">
       Please use a browser that supports "canvas"
     </canvas><br>
     Stanley Hung || stchhung@ucsc.edu <br>
-    Notes to grader: Non-cube primitive is the shell, animation is a walk, and poke animation is an idle look around
+    Notes to grader: Story: First Gym Battle! Left click to place / delete blocks (only 1 block per column)
     <div class="row">
       <div class="column">
         <p id="numdot"> XXX </p>
         <p> Animations:
             <button type="button" id="animationOnButton">ON</button>
             <button type="button" id="animationOffButton">OFF</button> 
-        <p>
-          Camera Angle: <input type="range" min="-90" max="90" value="0" class="slider" id="angleSlide">
-        </p>
-        <p>
-          HEAD: <br>
-          Head X <input type="range" min="-45" max="45" value="0" class="slider" id="headX"><br>
-          Head Y <input type="range" min="-45" max="45" value="0" class="slider" id="headY"><br>
-          Head Z <input type="range" min="-45" max="45" value="0" class="slider" id="headZ"><br>
-        </p>
-        <p>
-          BODY: <br>
-          Body X <input type="range" min="-45" max="45" value="0" class="slider" id="bodyX"><br>
-          Body Y <input type="range" min="-45" max="45" value="0" class="slider" id="bodyY"><br>
-          Body Z <input type="range" min="-45" max="45" value="0" class="slider" id="bodyZ"><br>
-        </p>
-        <p>
-          TAIL: <br>
-          Tail X <input type="range" min="-45" max="45" value="0" class="slider" id="tailX"><br>
-          Tail Y <input type="range" min="-45" max="45" value="0" class="slider" id="tailY"><br>
-        </p>
-        <p>
-          LEFT LEG: <br>
-          Left Leg X <input type="range" min="-45" max="45" value="0" class="slider" id="leftLegX"><br>
-          Left Leg Y <input type="range" min="-45" max="45" value="0" class="slider" id="leftLegY"><br>
-        </p>
-        <p>
-          RIGHT LEG: <br>
-          Right Leg X <input type="range" min="-45" max="45" value="0" class="slider" id="rightLegX"><br>
-          Right Leg Y <input type="range" min="-45" max="45" value="0" class="slider" id="rightLegY"><br>
-        </p>
-      </div>
-      <div class="column">
-        <p>
-          LEFT SHOULDER: <br>
-          Left Shoulder X <input type="range" min="-45" max="45" value="0" class="slider" id="leftShoulderX"><br>
-          Left Shoulder Y <input type="range" min="-45" max="45" value="0" class="slider" id="leftShoulderY"><br>
-          Left Shoulder Z <input type="range" min="-45" max="45" value="0" class="slider" id="leftShoulderZ"><br>
-        </p>
-        <p>
-          LEFT ARM: <br>
-          Left Arm X <input type="range" min="-45" max="45" value="0" class="slider" id="leftArmX"><br>
-          Left Arm Y <input type="range" min="-45" max="45" value="0" class="slider" id="leftArmY"><br>
-          Left Arm Z <input type="range" min="-45" max="45" value="0" class="slider" id="leftArmZ"><br>
-        </p>
-        <p>
-          LEFT HAND: <br>
-          Left Hand X <input type="range" min="-45" max="45" value="0" class="slider" id="leftHandX"><br>
-          Left Hand Y <input type="range" min="-45" max="45" value="0" class="slider" id="leftHandY"><br>
-          Left Hand Z <input type="range" min="-45" max="45" value="0" class="slider" id="leftHandZ"><br>
-        </p>
-      </div>
-      <div class="column">
-        <p>
-          RIGHT SHOULDER: <br>
-          Right Shoulder X <input type="range" min="-45" max="45" value="0" class="slider" id="rightShoulderX"><br>
-          Right Shoulder Y <input type="range" min="-45" max="45" value="0" class="slider" id="rightShoulderY"><br>
-          Right Shoulder Z <input type="range" min="-45" max="45" value="0" class="slider" id="rightShoulderZ"><br>
-        </p>
-        <p>
-          RIGHT ARM: <br>
-          Right Arm X <input type="range" min="-45" max="45" value="0" class="slider" id="rightArmX"><br>
-          Right Arm Y <input type="range" min="-45" max="45" value="0" class="slider" id="rightArmY"><br>
-          Right Arm Z <input type="range" min="-45" max="45" value="0" class="slider" id="rightArmZ"><br>
-        </p>
-        <p>
-          RIGHT HAND: <br>
-          Right Hand X <input type="range" min="-45" max="45" value="0" class="slider" id="rightHandX"><br>
-          Right Hand Y <input type="range" min="-45" max="45" value="0" class="slider" id="rightHandY"><br>
-          Right Hand Z <input type="range" min="-45" max="45" value="0" class="slider" id="rightHandZ"><br>
-        </p>
       </div>
       </div>
     </div>

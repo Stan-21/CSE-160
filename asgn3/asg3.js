@@ -152,7 +152,7 @@ function initTextures() {
   image1.onload = function(){ sendTextureToTEXTURE1(image1); };
   // Tell the browser to load an image
   image0.src = 'sky.jpg';
-  image1.src = 'grass.jpg';
+  image1.src = 'plastered_wall_04_diff_4k.jpg';
 
   return true;
 }
@@ -208,50 +208,6 @@ function addActionsForHTMLUI() {
 
   document.getElementById('animationOnButton').onclick = function() {camera.moveLeft(); };
   document.getElementById('animationOffButton').onclick = function() {camera.moveRight(); };
-
-  document.getElementById('angleSlide').addEventListener('mousemove', function() { g_globalAngleX = this.value; renderAllShapes(); });
-
-  document.getElementById('headX').addEventListener('mousemove', function() { headX = this.value; renderAllShapes(); });
-  document.getElementById('headY').addEventListener('mousemove', function() { headY = this.value; renderAllShapes(); });
-  document.getElementById('headZ').addEventListener('mousemove', function() { headZ = this.value; renderAllShapes(); });
-
-  document.getElementById('bodyX').addEventListener('mousemove', function() { bodyX = this.value; renderAllShapes(); });
-  document.getElementById('bodyY').addEventListener('mousemove', function() { bodyY = this.value; renderAllShapes(); });
-  document.getElementById('bodyZ').addEventListener('mousemove', function() { bodyZ = this.value; renderAllShapes(); });
-
-  document.getElementById('tailX').addEventListener('mousemove', function() { tailX = this.value; renderAllShapes(); });
-  document.getElementById('tailY').addEventListener('mousemove', function() { tailY = this.value; renderAllShapes(); });
-
-  document.getElementById('leftLegX').addEventListener('mousemove', function() { leftLegX = this.value; renderAllShapes(); });
-  document.getElementById('leftLegY').addEventListener('mousemove', function() { leftLegY = this.value; renderAllShapes(); });
-
-  document.getElementById('rightLegX').addEventListener('mousemove', function() { rightLegX = this.value; renderAllShapes(); });
-  document.getElementById('rightLegY').addEventListener('mousemove', function() { rightLegY = this.value; renderAllShapes(); });
-
-  document.getElementById('leftShoulderX').addEventListener('mousemove', function() { leftShoulderX = this.value; renderAllShapes(); });
-  document.getElementById('leftShoulderY').addEventListener('mousemove', function() { leftShoulderY = this.value; renderAllShapes(); });
-  document.getElementById('leftShoulderZ').addEventListener('mousemove', function() { leftShoulderZ = this.value; renderAllShapes(); });
-
-  document.getElementById('leftArmX').addEventListener('mousemove', function() { leftArmX = this.value; renderAllShapes(); });
-  document.getElementById('leftArmY').addEventListener('mousemove', function() { leftArmY = this.value; renderAllShapes(); });
-  document.getElementById('leftArmZ').addEventListener('mousemove', function() { leftArmZ = this.value; renderAllShapes(); });
-
-  document.getElementById('leftHandX').addEventListener('mousemove', function() { leftHandX = this.value; renderAllShapes(); });
-  document.getElementById('leftHandY').addEventListener('mousemove', function() { leftHandY = this.value; renderAllShapes(); });
-  document.getElementById('leftHandZ').addEventListener('mousemove', function() { leftHandZ = this.value; renderAllShapes(); });
-
-  document.getElementById('rightShoulderX').addEventListener('mousemove', function() { rightShoulderX = this.value; renderAllShapes(); });
-  document.getElementById('rightShoulderY').addEventListener('mousemove', function() { rightShoulderY = this.value; renderAllShapes(); });
-  document.getElementById('rightShoulderZ').addEventListener('mousemove', function() { rightShoulderZ = this.value; renderAllShapes(); });
-
-  document.getElementById('rightArmX').addEventListener('mousemove', function() { rightArmX = this.value; renderAllShapes(); });
-  document.getElementById('rightArmY').addEventListener('mousemove', function() { rightArmY = this.value; renderAllShapes(); });
-  document.getElementById('rightArmZ').addEventListener('mousemove', function() { rightArmZ = this.value; renderAllShapes(); });
-
-  document.getElementById('rightHandX').addEventListener('mousemove', function() { rightHandX = this.value; renderAllShapes(); });
-  document.getElementById('rightHandY').addEventListener('mousemove', function() { rightHandY = this.value; renderAllShapes(); });
-  document.getElementById('rightHandZ').addEventListener('mousemove', function() { rightHandZ = this.value; renderAllShapes(); });
-
 }
 
 function reset() {
@@ -361,6 +317,8 @@ function keydown(ev) {
     camera.panRight();
   } else if (ev.keyCode == 82) {
     console.log(camera.eye);
+    console.log(camera.at);
+    map[32-6][16] = 1; // 0, -10
   }
 }
 
@@ -368,12 +326,24 @@ function click(ev) {
   if (document.pointerLockElement != canvas) {
     return;
   }
-  console.log(map[Math.round(camera.eye.elements[0])][Math.round(camera.eye.elements[2])])
-  if (map[Math.round(camera.eye.elements[0])][Math.round(camera.eye.elements[2])] == 1) {
-    map[Math.round(camera.eye.elements[0])][Math.round(camera.eye.elements[2])] = 0;
-  } else {
-    map[Math.round(camera.eye.elements[0])][Math.round(camera.eye.elements[2])] = 1;
+  let x = 16 - Math.ceil(camera.at.elements[0]);
+  let y = 16 - Math.ceil(camera.at.elements[2]);
+  if ((x <= 31) && (y <= 31)) {
+    if (map[y][x] > 0) {
+      map[y][x] = 0;
+    } else if (map[y][x] == 0) {
+      if (camera.at.elements[1] <= 0) {
+        map[y][x] = 1;
+      } else {
+        map[y][x] = Math.floor(camera.at.elements[1]);
+      }
+    }
   }
+  /*if (map[16 - Math.round(camera.eye.elements[2] + camera.at.elements[2])][16 - Math.round(camera.eye.elements[0] + camera.at.elements[0])] == 1) {
+    map[16 - Math.round(camera.eye.elements[2] + camera.at.elements[2])][16 - Math.round(camera.eye.elements[0] + camera.at.elements[0])] = 0;
+  } else if (map[16 - Math.round(camera.eye.elements[2] + camera.at.elements[2])][16 - Math.round(camera.eye.elements[0] + camera.at.elements[0])] == 0){
+    map[16 - Math.round(camera.eye.elements[2] + camera.at.elements[2])][16 - Math.round(camera.eye.elements[0] + camera.at.elements[0])] = 1;
+  }*/
 }
 
 let headX = 0;
@@ -478,51 +448,77 @@ function updateAnimationAngles() {
 
 var camera = new Camera();
 
-//    LEFT
-// FRONT  BACK
-//    RIGHT
+//    FRONT
+// LEFT  RIGHT
+//    BACK
 var map = [
-  [1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1],
-  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+  [0,0,0,0,0,0,0,0,0,0,0,0,0,"p","p","p","p","p","p",0,0,0,0,0,0,0,0,0,0,0,0,0],
+  [0,0,0,0,0,0,0,0,0,0,0,0,0,"p","p","p","p","p","p",0,0,0,0,0,0,0,0,0,0,0,0,0],
+  [0,0,0,0,0,0,0,0,0,0,"i","i","i","p","p","p","p","p","p","i","i","i",0,0,0,0,0,0,0,0,0,0],
+  [0,0,0,0,0,0,0,0,"i","i","i","i","i","p","p","p","p","p","p","i","i","i","i","i",0,0,0,0,0,0,0,0],
+  [0,0,0,0,0,0,0,"i","i","i","i","i","o","p","p","p","p","p","p","o","i","i","i","i","i",0,0,0,0,0,0,0],
+  [0,0,0,0,0,0,"i","i","i","i","o","o","b","p","p","p","p","p","p","b","o","o","i","i","i","i",0,0,0,0,0,0],  
+  [0,0,0,0,0,"i","i","i","i","o","b","b","b","p","p","p","p","p","p","b","b","b","o","i","i","i","i",0,0,0,0,0],  
+  [0,0,0,0,"i","i","i","i","o","r","b","b","b","b","b","b","b","b","b","b","b","b","r","o","i","i","i","i",0,0,0,0],  
+  [0,0,0,0,"i","i","i","o","r","r","b","b","b","b","b","b","b","b","b","b","b","b","r","r","o","i","i","i",0,0,0,0],  
+  [0,0,0,"i","i","i","o","r","r","r","r","b","b","b","b","b","b","b","b","b","b","r","r","r","r","o","i","i","i",0,0,0],  
+  [0,0,"i","i","i","o","r","r","r","r","r","r","b","b","b","b","b","b","b","b","r","r","r","r","r","r","o","i","i","i",0,0],  
+  [0,0,"i","i","i","o","b","b","r","r","r","r","r","b","b","b","b","b","b","r","r","r","r","r","b","b","o","i","i","i",0,0],  
+  [0,0,"i","i","o","b","b","b","b","b","r","r","r","b","b","b","b","b","b","r","r","r","b","b","b","b","b","o","i","i",0,0],  
+  [0,0,"i","o","b","b","b","b","b","b","b","b","b","b","b","b","b","b","b","b","b","b","b","b","b","b","b","b","o","i",0,0],  
+  [0,0,"i","o","b","b","b","b","b","b","b","b","b","b","o","o","o","o","b","b","b","b","b","b","b","b","b","b","o","i",0,0],
+  [0,0,"i","o","o","o","o","o","o","o","o","o","o","o","o",1,1,"o","o","o","o","o","o","o","o","o","o","o","o","i",0,0],
+  [0,0,"i","o",1,1,1,1,1,1,1,1,1,1,"o",1,1,"o",1,1,1,1,1,1,1,1,1,1,"o","i",0,0],  
+  [0,0,"i","o",1,1,1,1,1,1,1,1,1,1,"o","o","o","o",1,1,1,1,1,1,1,1,1,1,"o","i",0,0],  
+  [0,0,"i","o",1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,"o","i",0,0],  
+  [0,0,"i","i","o",1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,"o","i","i",0,0],  
+  [0,0,"i","i","i","o",1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,"o","i","i","i",0,0],  
+  [0,0,"i","i","i","o",1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,"o","i","i","i",0,0],  
+  [0,0,0,"i","i","i","o",1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,"o","i","i","i",0,0,0],  
+  [0,0,0,0,"i","i","i","o",1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,"o","i","i","i",0,0,0,0],  
+  [0,0,0,0,"i","i","i","i","o",1,1,1,1,1,1,1,1,1,1,1,1,1,1,"o","i","i","i","i",0,0,0,0],  
+  [0,0,0,0,0,"i","i","i","i","o",1,1,1,"p","p","p","p","p","p",1,1,1,"o","i","i","i","i",0,0,0,0,0],  
+  [0,0,0,0,0,0,"i","i","i","i","o","o",1,"p","p","p","p","p","p",1,"o","o","i","i","i","i",0,0,0,0,0,0],
+  [0,0,0,0,0,0,0,"i","i","i","i","i","o","p","p","p","p","p","p","o","i","i","i","i","i",0,0,0,0,0,0,0],
+  [0,0,0,0,0,0,0,0,"i","i","i","i","i","p","p","p","p","p","p","i","i","i","i","i",0,0,0,0,0,0,0,0],
+  [0,0,0,0,0,0,0,0,0,0,"i","i","i","p","p","p","p","p","p","i","i","i",0,0,0,0,0,0,0,0,0,0],
+  [0,0,0,0,0,0,0,0,0,0,0,0,0,"p","p","p","p","p","p",0,0,0,0,0,0,0,0,0,0,0,0,0],
+  [0,0,0,0,0,0,0,0,0,0,0,0,0,"p","p","p","p","p","p",0,0,0,0,0,0,0,0,0,0,0,0,0],
 ];
 
 function drawMap() {
   var body = new Cube();
   for (x=0;x<32;x++){
     for (y=0;y<32;y++){
-      if (map[x][y]==1){
+      if (map[y][x]>0){
         body.color = [1.0,1.0,1.0,1.0];
-        body.matrix.setTranslate(-16 + x,-.75,-16 + y);
+        body.matrix.setTranslate(-16 + x,-.75 + (map[y][x] - 1),-16 + y);
+        body.render();
+      }
+      if (map[y][x] == "p") {
+        body.color = [0.5, 0.5, 0.5, 1.0];
+        body.matrix.setTranslate(-16 + x, -.75, -16 + y);
+        body.render();
+      }
+      if (map[y][x] == "i") {
+        body.color = [0.2, 0.2, 0.2, 1.0];
+        body.matrix.setTranslate(-16 + x, -.75, -16 + y);
+        body.matrix.scale(1,2,1);
+        body.render();
+      }
+      if (map[y][x] == "o") {
+        body.color = [0.0,0.0,0.0,1.0];
+        body.matrix.setTranslate(-16 + x, -.75, -16 + y);
+        body.render();
+      }
+      if (map[y][x] == "b") {
+        body.color = [0.0,0.0,1.0,1.0];
+        body.matrix.setTranslate(-16 + x, -.75, -16 + y);
+        body.render();
+      }
+      if (map[y][x] == "r") {
+        body.color = [1.0,0.0,0.0,1.0];
+        body.matrix.setTranslate(-16 + x, -.75, -16 + y);
         body.render();
       }
     }
@@ -565,6 +561,7 @@ function renderAllShapes() {
   body.matrix.rotate(bodyY, 0, 1, 0);
   body.matrix.rotate(bodyZ, 0, 0, 1);
   body.matrix.scale(0.7, 0.8, 0.5);
+  body.matrix.translate(0, 1.4, 0);
   var bodyRef = new Matrix4(body.matrix);
   body.render();
 
@@ -800,7 +797,7 @@ function renderAllShapes() {
   shell_.render();
 
   var floor = new Cube();
-  floor.color = [0.0, 1.0, 0.0, 1.0];
+  floor.color = [0.76, 0.64, 0.51, 1.0];
   floor.textureNum = 1;
   floor.matrix.translate(0, -0.75, 0.0);
   floor.matrix.scale(32, 0, 32);

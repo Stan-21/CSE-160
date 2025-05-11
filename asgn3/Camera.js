@@ -55,8 +55,6 @@ class Camera {
         s = s.normalize();
         this.at = this.at.add(s);
         this.eye = this.eye.add(s);
-        console.log(f);
-        console.log(s);
         /*this.eye.elements[0] += 0.5;
         this.at.elements[0] += 0.5;*/
     }
