@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Lighting!</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      .column {
+        float: left;
+        width: 25%;
+        padding: 10px;
+        height: 300px;
+      }
+      .row:after {
+        content: "";
+        display: table;
+        clear: both;
+      }
+    </style>
+    <link rel="shortcut icon" href="#">
+  </head>
+
+  <body onload="main()">
+    <canvas id="webgl" width="500" height="500">
+      Please use a browser that supports "canvas"
+    </canvas><br>
+    Stanley Hung || stchhung@ucsc.edu <br>
+    Notes to grader: Story: First Gym Battle! <br>
+    Controls: WASD to move, Q/E to pan Left/Right, Space/Shift to pan Up/Down
+    <div class="row">
+      <div class="column">
+        <p id="numdot"> XXX </p>
+        <p> Light:
+            <button type="button" id="lightOnButton">Light ON</button>
+            <button type="button" id="lightOffButton">Light OFF</button> 
+        </p>
+        <p> Normals:
+            <button type="button" id="normalOn">Normal ON</button>
+            <button type="button" id="normalOff">Normal OFF</button>
+        </p>
+        <p>
+        LightX <input type="range" min="-2000" max="2000" value="0" class="slider" id="lightSlideX"><br>
+        LightY <input type="range" min="-2000" max="2000" value="0" class="slider" id="lightSlideY"><br>
+        LightZ <input type="range" min="-2000" max="2000" value="0" class="slider" id="lightSlideZ"><br>
+        </p>
+        LightR <input type="range" min="0" max="100" value="50" class="slider" id="lightColorR"><br>
+        LightG <input type="range" min="0" max="100" value="50" class="slider" id="lightColorG"><br>
+        LightB <input type="range" min="0" max="100" value="50" class="slider" id="lightColorB"><br>
+      </div>
+      </div>
+    </div>
+    <script src="lib/webgl-utils.js"></script>
+    <script src="lib/webgl-debug.js"></script>
+    <script src="lib/cuon-utils.js"></script>
+    <script src="lib/cuon-matrix-cse160.js"></script>
+    <script src="Point.js"></script>
+    <script src="Circle.js"></script>
+    <script src="Triangle.js"></script>
+    <script src="Cube.js"></script>
+    <script src="Sphere.js"></script>
+    <script src="Camera.js"></script>
+    <script src="Shell.js"></script>
+    <script src="asg4.js"></script>
+  </body>
+</html>
