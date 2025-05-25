@@ -844,9 +844,9 @@ function renderAllShapes() {
 
   var sphere = new Sphere();
   if (normalOn) { sphere.textureNum = -3}
-  sphere.matrix.scale(5,5,5);
-  sphere.matrix.translate(0,1,0);
-  //sphere.render();
+  sphere.matrix.scale(2,2,2);
+  sphere.matrix.translate(-5,1,0);
+  sphere.render();
 
   /*  var sky = new Cube();
   sky.color = [0.0,0.0,1.0,1.0];
