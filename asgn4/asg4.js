@@ -743,6 +743,7 @@ var map = [
 
 function drawMap() {
   var body = new Cube();
+  if (normalOn) { body.textureNum = -3}
   for (x=0;x<32;x++){
     for (y=0;y<32;y++){
       if (map[y][x]>0){
@@ -819,6 +820,13 @@ function renderAllShapes() {
   gl.uniform1f(u_innerLimit, 1);
   gl.uniform1f(u_outerLimit, 1);
 
+  var spotlight = new Cube();
+  spotlight.color = [0,0,1,1];
+  spotlight.matrix.translate(g_spotlightPos[0], g_spotlightPos[1], g_spotlightPos[2]);
+  spotlight.matrix.scale(-.1,-.1,-.1);
+  spotlight.matrix.translate(-.5,-.5,-.5);
+  spotlight.render();
+
   var light = new Cube();
   light.color = [2,2,0,1];
   light.matrix.translate(g_lightPos[0], g_lightPos[1], g_lightPos[2]);
@@ -828,6 +836,7 @@ function renderAllShapes() {
 
   var floor = new Cube();
   floor.color = [0.76, 0.64, 0.51, 1.0];
+  if (normalOn) { floor.textureNum = -3}
   floor.matrix.translate(0, -0.75, 0.0);
   floor.matrix.scale(32, 0, 32);
   floor.matrix.translate(-0.5, -0.5, -0.5);
@@ -858,8 +867,9 @@ function renderAllShapes() {
 
   var cheren = new Cube();
   cheren.textureNum = 1;
+  if (normalOn) { cheren.textureNum = -3}
   cheren.matrix.translate(0,0,-12);
-  cheren.matrix.scale(4,4,0);
+  cheren.matrix.scale(4,4,0.01);
   cheren.matrix.translate(-.5,0,-.5);
   cheren.render();
 
@@ -882,6 +892,7 @@ function sendTextToHTML(text, htmlID) {
 
 function Oshawott() {
   var body = new Cube();
+  if (normalOn) { body.textureNum = -3}
   body.color = [0.56, 0.8, 0.79, 1.0];
   body.matrix.translate(-0.3, -0.65, 0);
   var bodyCoords = new Matrix4(body.matrix);
@@ -895,6 +906,7 @@ function Oshawott() {
 
 
   var tail = new Cube();
+  if (normalOn) { tail.textureNum = -3}
   tail.color = [0.2, 0.29, 0.41, 1.0];
   tail.matrix = new Matrix4(bodyRef);
   tail.matrix.translate(0.25, 0.1, 0.75);
@@ -907,6 +919,7 @@ function Oshawott() {
   tail.render();
   
   var head = new Cube(); // Will prolly want to save head coords
+  if (normalOn) { head.textureNum = -3}
   head.color = [1.0, 1.0, 1.0, 1.0];
   head.matrix = new Matrix4(bodyRef);
   head.matrix.translate(-0.15, 1.0, -0.25);
@@ -920,6 +933,7 @@ function Oshawott() {
   head.render();
 
   var neck = new Cube();
+  if (normalOn) { neck.textureNum = -3}
   neck.color = [0.36, 0.64, 0.7, 1.0];
   neck.matrix = new Matrix4(headCoords);
   neck.matrix.translate(-0.05, -0.25, -0.1);
@@ -927,6 +941,7 @@ function Oshawott() {
   neck.render();
 
   var nose = new Cube();
+  if (normalOn) { nose.textureNum = -3}
   nose.color = [0.54, 0.4, 0.2, 1.0];
   nose.matrix = new Matrix4(headCoords);
   nose.matrix.translate(0.5, 0.25, -0.1);
@@ -934,6 +949,7 @@ function Oshawott() {
   nose.render();
 
   var leftHorn = new Cube();
+  if (normalOn) { leftHorn.textureNum = -3}
   leftHorn.color = [0.2, 0.29, 0.41, 1.0];
   leftHorn.matrix = new Matrix4(headCoords);
   leftHorn.matrix.translate(0.3, 0.10, 0.5);
@@ -943,6 +959,7 @@ function Oshawott() {
   leftHorn.render();
 
   var rightHorn = new Cube();
+  if (normalOn) { rightHorn.textureNum = -3}
   rightHorn.color = [0.2, 0.29, 0.41, 1.0];
   rightHorn.matrix = new Matrix4(headCoords);
   rightHorn.matrix.translate(0.68, 0.4, 0.5);
@@ -952,6 +969,7 @@ function Oshawott() {
   rightHorn.render();
 
   var leftEye = new Cube();
+  if (normalOn) { leftEye.textureNum = -3}
   leftEye.color = [0.0, 0.0, 0.0, 1.0];
   leftEye.matrix = new Matrix4(headCoords);
   leftEye.matrix.translate(0.25, 0.3, -0.1);
@@ -960,6 +978,7 @@ function Oshawott() {
   leftEye.render();
 
   var lfreckle_b = new Cube();
+  if (normalOn) { lfreckle_b.textureNum = -3}
   lfreckle_b.color = [0.0, 0.0, 0.0, 1.0];
   lfreckle_b.matrix = new Matrix4(leftEyeCoords);
   lfreckle_b.matrix.translate(0, -0.2, 0);
@@ -968,18 +987,21 @@ function Oshawott() {
   lfreckle_b.render();
 
   var lfreckle_l = new Cube();
+  if (normalOn) { lfreckle_l.textureNum = -3}
   lfreckle_l.color = [0.0, 0.0, 0.0, 1.0];
   lfreckle_l.matrix = new Matrix4(lfreckle_bRef);
   lfreckle_l.matrix.translate(2, 3, 0);
   lfreckle_l.render();
 
   var lfreckle_r = new Cube();
+  if (normalOn) { lfreckle_r.textureNum = -3}
   lfreckle_r.color = [0.0, 0.0, 0.0, 1.0];
   lfreckle_r.matrix = new Matrix4(lfreckle_bRef);
   lfreckle_r.matrix.translate(-2, 3.5, 0);
   lfreckle_r.render();
 
   var rfreckle_b = new Cube();
+  if (normalOn) { rfreckle_b.textureNum = -3}
   rfreckle_b.color = [0.0, 0.0, 0.0, 1.0];
   rfreckle_b.matrix = new Matrix4(leftEyeCoords);
   rfreckle_b.matrix.translate(0.7, -0.2, 0);
@@ -988,18 +1010,21 @@ function Oshawott() {
   rfreckle_b.render();
 
   var rfreckle_l = new Cube();
+  if (normalOn) { rfreckle_l.textureNum = -3}
   rfreckle_l.color = [0.0, 0.0, 0.0, 1.0];
   rfreckle_l.matrix = new Matrix4(rfreckle_b_bRef);
   rfreckle_l.matrix.translate(1.8, 3.3, 0);
   rfreckle_l.render();
 
   var rfreckle_r = new Cube();
+  if (normalOn) { rfreckle_r.textureNum = -3}
   rfreckle_r.color = [0.0, 0.0, 0.0, 1.0];
   rfreckle_r.matrix = new Matrix4(rfreckle_b_bRef);
   rfreckle_r.matrix.translate(-2.5, 3.4, 0);
   rfreckle_r.render();
 
   var rightEye = new Cube();
+  if (normalOn) { rightEye.textureNum = -3}
   rightEye.color = [0.0, 0.0, 0.0, 1.0];
   rightEye.matrix = new Matrix4(headCoords);
   rightEye.matrix.translate(0.85, 0.3, -0.1);
@@ -1007,6 +1032,7 @@ function Oshawott() {
   rightEye.render();
 
   var leftShoulder = new Cube();
+  if (normalOn) { leftShoulder.textureNum = -3}
   leftShoulder.color = [1.0, 1.0, 1.0, 1.0];
   leftShoulder.matrix = new Matrix4(bodyRef);
   leftShoulder.matrix.translate(-0.25, 0.5, 0.25);
@@ -1021,6 +1047,7 @@ function Oshawott() {
   //console.log(leftShoulder.matrix);
 
   var leftArm = new Cube();
+  if (normalOn) { leftArm.textureNum = -3}
   leftArm.color = [1.0, 1.0, 1.0, 1.0];
   leftArm.matrix = new Matrix4(leftShoulderCoords);
   leftArm.matrix.translate(0, 0, -0.4);
@@ -1035,6 +1062,7 @@ function Oshawott() {
   //console.log(leftArm.matrix);
 
   var leftHand = new Cube();
+  if (normalOn) { leftHand.textureNum = -3}
   leftHand.color = [1.0, 1.0, 1.0, 1.0];
   leftHand.matrix = new Matrix4(leftArmCoords);
   leftHand.matrix.translate(0.1, 0, -0.15);
@@ -1048,6 +1076,7 @@ function Oshawott() {
   //console.log(leftHand.matrix);
 
   var rightShoulder = new Cube();
+  if (normalOn) { rightShoulder.textureNum = -3}
   rightShoulder.color = [1.0, 1.0, 1.0, 1.0];
   rightShoulder.matrix = new Matrix4(bodyRef);
   rightShoulder.matrix.translate(1.0, 0.5, 0.25);
@@ -1061,6 +1090,7 @@ function Oshawott() {
   rightShoulder.render();
 
   var rightArm = new Cube();
+  if (normalOn) { rightArm.textureNum = -3}
   rightArm.color = [1.0, 1.0, 1.0, 1.0];
   rightArm.matrix = new Matrix4(rightShoulderCoords);
   rightArm.matrix.translate(0, 0, -0.4);
@@ -1074,6 +1104,7 @@ function Oshawott() {
   rightArm.render();
 
   var rightHand = new Cube();
+  if (normalOn) { rightHand.textureNum = -3}
   rightHand.color = [1.0, 1.0, 1.0, 1.0];
   rightHand.matrix = new Matrix4(rightArmCoords);
   rightHand.matrix.translate(0, 0, -0.15);
@@ -1086,6 +1117,7 @@ function Oshawott() {
   rightHand.render();
 
   var leftLeg = new Cube();
+  if (normalOn) { leftLeg.textureNum = -3}
   leftLeg.color = [0.2, 0.29, 0.41, 1.0];
   leftLeg.matrix = new Matrix4(bodyRef);
   leftLeg.matrix.translate(-0.1, -0.18, 0.6);
@@ -1096,6 +1128,7 @@ function Oshawott() {
   leftLeg.render();
 
   var rightLeg = new Cube();
+  if (normalOn) { rightLeg.textureNum = -3}
   rightLeg.color = [0.2, 0.29, 0.41, 1.0];
   rightLeg.matrix = new Matrix4(bodyRef);
   rightLeg.matrix.translate(0.85, -0.2, 0.6);
@@ -1106,6 +1139,7 @@ function Oshawott() {
   rightLeg.render();
 
   var shell = new Cube();
+  if (normalOn) { shell.textureNum = -3}
   shell.color = [0.99, 0.92, 0.68, 1.0];
   shell.matrix = new Matrix4(bodyRef);
   shell.matrix.translate(shellTX,shellTY,shellTZ);
@@ -1117,6 +1151,7 @@ function Oshawott() {
   shell.render();
 
   var shell_ = new Cube();
+  if (normalOn) { shell_.textureNum = -3}
   shell_.color = [0.99, 0.92, 0.68, 1.0];
   shell_.matrix = new Matrix4(bodyRef);
   shell_.matrix.translate(shellTX, shellTY, shellTZ);
@@ -1131,6 +1166,7 @@ function Oshawott() {
 
 function Lillipup() {
   var body = new Cube();
+  if (normalOn) { body.textureNum = -3}
   body.color = [0.84, 0.58, 0.46, 1.0];
   body.matrix.translate(0,0,lBody);
   body.matrix.translate(-0.3, -0.65, -25);
@@ -1141,6 +1177,7 @@ function Lillipup() {
   body.render();
 
   var head = new Cube(); // Will prolly want to save head coords
+  if (normalOn) { head.textureNum = -3}
   head.color = [0.96, 0.83, 0.61, 1.0];
   head.matrix = new Matrix4(bodyRef);
   head.matrix.rotate(headX, 1, 0, 0);
@@ -1152,6 +1189,7 @@ function Lillipup() {
   head.render();
 
   var thingy = new Cube();
+  if (normalOn) { thingy.textureNum = -3}
   thingy.color = [0.25,0.29,0.41,1.0];
   thingy.matrix = new Matrix4(headCoords);
   thingy.matrix.translate(0,0.25,-0.5);
@@ -1159,6 +1197,7 @@ function Lillipup() {
   thingy.render();
 
   var leftHorn = new Cube();
+  if (normalOn) { leftHorn.textureNum = -3}
   leftHorn.color = [0.84, 0.58, 0.46, 1.0];
   leftHorn.matrix = new Matrix4(headCoords);
   leftHorn.matrix.translate(0.7,0,-0.1);
@@ -1168,6 +1207,7 @@ function Lillipup() {
   leftHorn.render();
 
   var rightHorn = new Cube();
+  if (normalOn) { rightHorn.textureNum = -3}
   rightHorn.color = [0.84, 0.58, 0.46, 1.0];
   rightHorn.matrix = new Matrix4(headCoords);
   rightHorn.matrix.translate(0.1,0.25,-0.1);
@@ -1177,6 +1217,7 @@ function Lillipup() {
   rightHorn.render();
 
   var tail = new Cube();
+  if (normalOn) { tail.textureNum = -3}
   tail.color = [0.63, 0.43, 0.35, 1.0];
   tail.matrix = new Matrix4(bodyRef);
   tail.matrix.translate(0.25, 0.4, 0);
@@ -1189,6 +1230,7 @@ function Lillipup() {
   tail.render();
 
   var leftLeg = new Cube();
+  if (normalOn) { leftLeg.textureNum = -3}
   leftLeg.color = [0.63, 0.43, 0.35, 1.0];
   leftLeg.matrix = new Matrix4(bodyRef);
   leftLeg.matrix.translate(0.1, -0.5, 0.7);
@@ -1196,6 +1238,7 @@ function Lillipup() {
   leftLeg.render();
 
   var leftLeg_ = new Cube();
+  if (normalOn) { leftLeg_.textureNum = -3}
   leftLeg_.color = [0.63, 0.43, 0.35, 1.0];
   leftLeg_.matrix = new Matrix4(bodyRef);
   leftLeg_.matrix.translate(0.1, -0.5, 0.0);
@@ -1203,6 +1246,7 @@ function Lillipup() {
   leftLeg_.render();
 
   var rightLeg = new Cube();
+  if (normalOn) { rightLeg.textureNum = -3}
   rightLeg.color = [0.63, 0.43, 0.35, 1.0];
   rightLeg.matrix = new Matrix4(bodyRef);
   rightLeg.matrix.translate(0.7, -0.5, 0.7);
@@ -1210,6 +1254,7 @@ function Lillipup() {
   rightLeg.render();
 
   var rightLeg_ = new Cube();
+  if (normalOn) { rightLeg_.textureNum = -3}
   rightLeg_.color = [0.63, 0.43, 0.35, 1.0];
   rightLeg_.matrix = new Matrix4(bodyRef);
   rightLeg_.matrix.translate(0.7, -0.5, 0.0);
@@ -1217,6 +1262,7 @@ function Lillipup() {
   rightLeg_.render();
 
   var leftEye = new Cube();
+  if (normalOn) { leftEye.textureNum = -3}
   leftEye.color = [0.0, 0.0, 0.0, 1.0];
   leftEye.matrix = new Matrix4(headCoords);
   leftEye.matrix.translate(0.3, 0.55, 0.31);
@@ -1225,6 +1271,7 @@ function Lillipup() {
   leftEye.render();
 
   var leftPupil = new Cube();
+  if (normalOn) { leftPupil.textureNum = -3}
   leftPupil.color = [1.0, 1.0, 1.0, 1.0];
   leftPupil.matrix = new Matrix4(leftEyeCoords);
   leftPupil.matrix.translate(0.06,0.09,0.11);
@@ -1233,6 +1280,7 @@ function Lillipup() {
   leftPupil.render();
 
   var leftE = new Cube();
+  if (normalOn) { leftE.textureNum = -3}
   leftE.color = [1.0,1.0,1.0,1.0];
   leftE.matrix = new Matrix4(leftEyeCoords);
   leftE.matrix.translate(-0.2,0,0.0);
@@ -1240,6 +1288,7 @@ function Lillipup() {
   leftE.render();
 
   var rightEye = new Cube();
+  if (normalOn) { rightEye.textureNum = -3}
   rightEye.color = [0.0, 0.0, 0.0, 1.0];
   rightEye.matrix = new Matrix4(headCoords);
   rightEye.matrix.translate(0.7, 0.55, 0.31);
@@ -1248,6 +1297,7 @@ function Lillipup() {
   rightEye.render();
 
   var rightPupil = new Cube();
+  if (normalOn) { rightPupil.textureNum = -3}
   rightPupil.color = [1.0, 1.0, 1.0, 1.0];
   rightPupil.matrix = new Matrix4(rightEyeCoords);
   rightPupil.matrix.translate(0.06,0.09,0.11);
@@ -1255,6 +1305,7 @@ function Lillipup() {
   rightPupil.render();
 
   var rightE = new Cube();
+  if (normalOn) { rightE.textureNum = -3}
   rightE.color = [1.0,1.0,1.0,1.0];
   rightE.matrix = new Matrix4(leftEyeCoords);
   rightE.matrix.translate(3.65,0,0.0);
@@ -1262,6 +1313,7 @@ function Lillipup() {
   rightE.render();
 
   var nose = new Cube();
+  if (normalOn) { nose.textureNum = -3}
   nose.color = [0.8, 0.2, 0.2, 1.0];
   nose.matrix = new Matrix4(headCoords);
   nose.matrix.translate(0.48, 0.4, 0.33);
@@ -1269,6 +1321,7 @@ function Lillipup() {
   nose.render();
 
   var mouth = new Cube();
+  if (normalOn) { mouth.textureNum = -3}
   mouth.color = [0.0, 0.0, 0.0, 1.0];
   mouth.matrix = new Matrix4(headCoords);
   mouth.matrix.translate(0.55, 0.2, 0.41);
