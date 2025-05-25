@@ -30,10 +30,17 @@ var FSHADER_SOURCE = `
   uniform sampler2D u_Sampler2;
   uniform int u_whichTexture;
   uniform int u_lightOn;
+  uniform int u_spotLightOn;
   uniform vec4 u_lightColor;
   uniform vec3 u_lightPos;
+  uniform vec3 u_spotlightPos;
   uniform vec3 u_cameraPos;
   varying vec4 v_VertPos;
+
+  uniform vec3 u_lightDirection;
+  uniform float u_innerLimit;
+  uniform float u_outerLimit;
+
   void main() {
     if (u_whichTexture == -3) {
       gl_FragColor = vec4((v_Normal+1.0)/2.0,1.0);
@@ -56,12 +63,6 @@ var FSHADER_SOURCE = `
       vec3 lightVector = u_lightPos-vec3(v_VertPos);
       float r=length(lightVector);
 
-      //if (r<1.0) {
-      //  gl_FragColor = vec4(1,0,0,1);
-      //} else if (r<2.0) {
-      //  gl_FragColor = vec4(0,1,0,1);
-      //}
-
       vec3 L = normalize(lightVector);
       vec3 N = normalize(v_Normal);
       float nDotL = max(dot(N,L),0.0);
@@ -74,7 +75,26 @@ var FSHADER_SOURCE = `
       vec3 diffuse = vec3(gl_FragColor) * nDotL * 0.7;
       vec3 ambient = vec3(gl_FragColor) * 0.3;
       gl_FragColor = vec4(specular+diffuse+ambient,1.0);
+    }
+
+    if (u_spotLightOn == 1) {
+      vec3 normal = normalize(v_Normal);
+      vec3 surfaceToLightDirection = normalize(u_spotlightPos-vec3(v_VertPos));
+      vec3 surfaceToViewDirection = normalize(u_cameraPos-vec3(v_VertPos));
+      vec3 halfVector = normalize(surfaceToLightDirection+surfaceToViewDirection);
+      float light = 0.0;
+      float specular = 0.0;
+      
+      float dotFromDirection = dot(surfaceToLightDirection,-u_lightDirection);
+      float limitRange = u_innerLimit - u_outerLimit;
+      float inLight = clamp((dotFromDirection - u_outerLimit) / limitRange, 0.0, 1.0);
+      if (inLight > 0.5) {
+        light = inLight * dot(v_Normal, u_spotlightPos-vec3(v_VertPos));
+        specular = inLight * pow(dot(normal, halfVector), 2.0);
+        gl_FragColor *= light;
+        gl_FragColor += vec4(specular,specular,specular, 1.0);
       }
+    }
   }` 
 
 // Global variables
@@ -94,9 +114,14 @@ let u_Sampler1;
 let u_Sampler2;
 let u_whichTexture;
 let u_lightOn;
+let u_spotLightOn;
 let u_lightColor;
 let u_lightPos;
+let u_spotlightPos;
 let u_cameraPos;
+let u_lightDirection;
+let u_innerLimit;
+let u_outerLimit;
 
 let g_globalAngleX=180;
 let g_globalAngleY=0;
@@ -200,15 +225,45 @@ function connectVariablesToGLSL() {
     return false;
   }
 
+  u_spotLightOn = gl.getUniformLocation(gl.program, 'u_spotLightOn');
+  if (!u_spotLightOn) {
+    console.log('Failed to get the storage location of u_spotLightOn');
+    return false;
+  }
+
   u_lightPos = gl.getUniformLocation(gl.program, 'u_lightPos');
   if (!u_lightPos) {
     console.log('Failed to get the storage location of u_lightPos');
     return;
   }
 
+  u_spotlightPos = gl.getUniformLocation(gl.program, 'u_spotlightPos');
+  if (!u_spotlightPos) {
+    console.log('Failed to get the storage location of u_spotlightPos');
+    return;
+  }
+
   u_lightColor = gl.getUniformLocation(gl.program, 'u_lightColor');
   if (!u_lightColor) {
     console.log('Failed to get the storage location of u_lightColor');
+  }
+
+  u_lightDirection = gl.getUniformLocation(gl.program, 'u_lightDirection');
+  if (!u_lightDirection) {
+    console.log('Failed to get the storage location of u_lightDirection');
+    return;
+  }
+
+  u_innerLimit = gl.getUniformLocation(gl.program, 'u_innerLimit') 
+  if (!u_innerLimit) {
+    console.log('Failed to get the storage location of u_innerLimit');
+    return;
+  }
+
+  u_outerLimit = gl.getUniformLocation(gl.program, 'u_outerLimit') 
+  if (!u_outerLimit) {
+    console.log('Failed to get the storage location of u_outerLimit');
+    return;
   }
 
   u_cameraPos = gl.getUniformLocation(gl.program, 'u_cameraPos');
@@ -308,17 +363,25 @@ let pokeOn = false;
 
 let animationOn = true;
 let lightOn = true;
+let spotLightOn = true;
 let attackOn = false;
 let normalOn = false;
-let g_lightPos = [0,1,-2];
+let g_lightPos = [0,7,-10];
+let g_spotlightPos = [0,5,-5];
 
 let g_lightRGB = [1,1,1,1];
+
+let lightDirection = [0,-1,1];
+var innerLimit = 3 * Math.PI / 180;
+var outerLimit = 30 * Math.PI / 180;
 
 
 function addActionsForHTMLUI() {
 
   document.getElementById('lightOnButton').onclick = function() {  gl.uniform1i(u_lightOn, lightOn);; };
   document.getElementById('lightOffButton').onclick = function() {  gl.uniform1i(u_lightOn, !lightOn);; };
+  document.getElementById('spotOnButton').onclick = function() {  gl.uniform1i(u_spotLightOn, spotLightOn);; };
+  document.getElementById('spotOffButton').onclick = function() {  gl.uniform1i(u_spotLightOn, !spotLightOn);; };
   document.getElementById('normalOn').onclick = function() {normalOn = true;};
   document.getElementById('normalOff').onclick = function() {normalOn = false;};
 
@@ -747,15 +810,20 @@ function renderAllShapes() {
   // move y position up 0.1!!
 
   gl.uniform3f(u_lightPos, g_lightPos[0], g_lightPos[1], g_lightPos[2]);
+  gl.uniform3f(u_spotlightPos, g_spotlightPos[0], g_spotlightPos[1], g_spotlightPos[2]);
   gl.uniform3f(u_cameraPos, camera.eye.elements[0], camera.eye.elements[1], camera.eye.elements[2]);
 
   gl.uniform4f(u_lightColor, g_lightRGB[0], g_lightRGB[1], g_lightRGB[2], g_lightRGB[3]);
+
+  gl.uniform3fv(u_lightDirection, lightDirection);
+  gl.uniform1f(u_innerLimit, 1);
+  gl.uniform1f(u_outerLimit, 1);
 
   var light = new Cube();
   light.color = [2,2,0,1];
   light.matrix.translate(g_lightPos[0], g_lightPos[1], g_lightPos[2]);
   light.matrix.scale(-.1,-.1,-.1);
-  light.matrix.translate(-.5,80,-.5);
+  light.matrix.translate(-.5,-.5,-.5);
   light.render();
 
   var floor = new Cube();
