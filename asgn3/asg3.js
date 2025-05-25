@@ -311,8 +311,8 @@ function main() {
 
   document.onkeydown = keydown;
   canvas.onclick = async (ev) => {
-    if (audio1.paused) {
-      audio1.play();
+    if (audio1.paused && audio2.paused) {
+      //audio1.play();
     }
     click(ev);
     await canvas.requestPointerLock();
@@ -379,7 +379,7 @@ function keydown(ev) {
       if (!audio1.paused) {
         audio1.pause();
       }
-      audio2.play();
+      //audio2.play();
     }
   }
 }
