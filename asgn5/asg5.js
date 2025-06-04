@@ -29,33 +29,32 @@ function main() {
 	gui.add(minMaxGUIHelper, 'max', 0.1, 50, 0.1).name('far').onChange(updateCamera);
 
 	const myObject = {
-		myBoolean: true
+		WaterStadium: true
 	}
-	gui.add(myObject, 'myBoolean').onChange(value => {
-		console.log(value);
+	gui.add(myObject, 'WaterStadium').onChange(value => {
+		if (value) {
+			loadWaterStadium();
+		} else if (!value) {
+			unloadWaterStadium();
+		}
 	});
 
 	{
 		const skyBoxLoader = new THREE.CubeTextureLoader();
 		const background = skyBoxLoader.load([
-			'assets/grass.png',
-			'assets/grass.png',
-			'assets/grass.png',
-			'assets/grass.png',
-			'assets/grass.png',
-			'assets/grass.png',
+			'assets/sky.png',
+			'assets/sky.png',
+			'assets/sky.png',
+			'assets/sky.png',
+			'assets/sky.png',
+			'assets/sky.png',
 		])
 		scene.background = background;
 	}
 
-	let rock;
-	let windmill;
-	let land = [];
+	let waterEnv = [];
 
 	loadWaterStadium();
-
-
-	makeInstance(new THREE.BoxGeometry(0.5, 0.5, 0.5), 0xffff00, 0, 5, 1); // Light
 
 	addEventListener('keypress', event => {
 		if (event.code == 'KeyR'){
@@ -91,10 +90,10 @@ function main() {
 		p2.render(time);
 		renderer.render(scene, camera);
 		requestAnimationFrame(render);
-		/*for (var attack of p1.attacks) {
+		for (var attack of p1.attacks) {
 			let a = attack.projectile; // alias
-			a.position.x += 0.1 * attack.direction.x;
-			a.position.z += 0.1 * attack.direction.y;
+			a.position.x += 0.1;
+			//a.position.z += 0.1 * attack.direction.y;
 			if (a.position.x > 15) {
 				a.visible = false;
 				a.geometry.dispose();
@@ -102,7 +101,8 @@ function main() {
 				scene.remove(a);
 			}
 			if (collides(a, p2.head)) {
-				p2.knockback(p1.direction.x, p1.direction.y);
+				p2.knockback(1, 0);
+				//p2.knockback(p1.direction.x, p1.direction.y);
 				a.visible = false;
 				a.geometry.dispose();
 				a.material.dispose();
@@ -110,15 +110,26 @@ function main() {
 			}
 		}
 		if ((collides(p1.head, p2.head)) && (p1.tackle)) {
-			p2.knockback();
+			p2.knockback(2, 0);
+			console.log("adsf");
 			p1.tackle = false;
-		} else if (collides(p1.head, p2.head)){
+		} else if ((collides(p1.head, p2.head) && (!p2.tackle))){
 			for (let body of p1.oshawott) {
 				body.position.x -= 1;
 			}
-		}*/
-	}
+			for (let body of p2.lillipup) {
+				body.position.x += 1;
+			}
+		}
 
+		if ((collides(p2.head, p1.head)) && (p2.tackle)) {
+			p1.knockback(-2, 0);
+			console.log("adsf");
+			p2.tackle = false;
+		}
+	}
+	
+	requestAnimationFrame(render);
 	function makeInstance(geometry, color, x, y, z) {
 		const material = new THREE.MeshPhongMaterial({color});
 		const cube = new THREE.Mesh(geometry, material);
@@ -128,7 +139,6 @@ function main() {
 		cube.position.z = z;
 		return cube;
 	}
-	requestAnimationFrame(render);
 
 	function updateCamera() {
 		camera.updateProjectionMatrix();
@@ -150,7 +160,7 @@ function main() {
 		gltfLoader.load(
 			'assets/Rock.glb',
 			function(gltf) {
-				rock = gltf.scene;
+				waterEnv.push(gltf.scene);
 				gltf.scene.scale.x = 8;
 				gltf.scene.scale.y = 8;
 				gltf.scene.scale.z = 8;
@@ -168,7 +178,7 @@ function main() {
 		gltfLoader.load(
 			'assets/Windmill.glb',
 			function(gltf) {
-				windmill = gltf.scene;
+				waterEnv.push(gltf.scene);
 				gltf.scene.scale.x = 3.5;
 				gltf.scene.scale.y = 3.5;
 				gltf.scene.scale.z = 3.5;
@@ -183,24 +193,54 @@ function main() {
 				gltf.asset;
 			}
 		)
-		// Land
-        land.push(makeInstance(new THREE.BoxGeometry(6, 0.75, 5), 0x00ff00, 4.5, -0.5, -1));
-        land.push(makeInstance(new THREE.BoxGeometry(7, 0.75, 3), 0x00ff00, -4, -0.5, -2));
-        land.push(makeInstance(new THREE.BoxGeometry(4, 0.75, 3), 0x00ff00, -5.5, -0.5, 1));
-        land.push(makeInstance(new THREE.BoxGeometry(5, 0.75, 4), 0xffff00, -1, -1, -1.5));
+
+
+		const loader = new THREE.TextureLoader();
+		loader.load('assets/grass.png', (texture) => {
+			texture.colorSpace = THREE.SRGBColorSpace;
+			const grass_material = [
+				new THREE.MeshBasicMaterial({map: loadColorTexture('assets/dirt.png', loader)}),
+				new THREE.MeshBasicMaterial({map: loadColorTexture('assets/dirt.png', loader)}),
+				new THREE.MeshBasicMaterial({map: loadColorTexture('assets/grass.png', loader)}),
+				new THREE.MeshBasicMaterial({map: loadColorTexture('assets/dirt.png', loader)}),
+				new THREE.MeshBasicMaterial({map: loadColorTexture('assets/dirt.png', loader)}),
+				new THREE.MeshBasicMaterial({map: loadColorTexture('assets/dirt.png', loader)}),
+			];
+			waterEnv.push(makeTextureInstance(new THREE.BoxGeometry(6, 0.75, 5), grass_material, 4.5, -0.5, -1));
+			waterEnv.push(makeTextureInstance(new THREE.BoxGeometry(7, 0.75, 3), grass_material, -4, -0.5, -2));
+			waterEnv.push(makeTextureInstance(new THREE.BoxGeometry(4, 0.75, 3), grass_material, -5.5, -0.5, 1));
+        	waterEnv.push(makeTextureInstance(new THREE.BoxGeometry(5, 0.75, 4), grass_material, -1, -1, -1.5));
+		})
         // Water
-        land.push(makeInstance(new THREE.BoxGeometry(16, 0.5, 8), 0x0000ff, 0, -1, 0));
+		loader.load('assets/water.png', (texture) => {
+			texture.colorSpace = THREE.SRGBColorSpace;
+			const water_material = new THREE.MeshPhongMaterial({
+				map: texture,
+			})
+			waterEnv.push(makeTextureInstance(new THREE.BoxGeometry(16, 0.5, 8), water_material, 0, -1, 0));
+		})
+	}
+
+	function loadColorTexture(path, loader) {
+		const texture = loader.load( path );
+		texture.colorSpace = THREE.SRGBColorSpace;
+		return texture;
+	}
+
+	function makeTextureInstance(geometry, material, x, y, z){
+		const instance = new THREE.Mesh(geometry, material);
+		scene.add(instance);
+		instance.position.x = x;
+		instance.position.y = y;
+		instance.position.z = z;
+		return instance;
+
 	}
 
 	function unloadWaterStadium() {
-		scene.remove(windmill);
-		scene.remove(rock);
-		for (var obj of land) {
-			obj.geometry.dispose();
-			obj.material.dispose();
+		for (var obj of waterEnv) {
 			scene.remove(obj);
 		}
-		land = [];
 	}
 }
 
