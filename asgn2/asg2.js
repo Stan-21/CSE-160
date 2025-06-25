@@ -322,6 +322,8 @@ function updateAnimationAngles() {
 
   if ((g_seconds - elasped >= 3.5) && (pokeOn)) {
     pokeOn = false;
+    animationOn = true;
+    console.log(pokeOn, animationOn);
     reset();
   }
 }

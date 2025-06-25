@@ -6,6 +6,8 @@ class Triangle {
         this.size = 5.0;
         this.points = [];
         this.state = 0;
+
+        this.buffer = null;
     }
 
     render() {
@@ -84,13 +86,15 @@ function drawTriangle(vertices) {
 
     var n = 3;
 
-    var vertexBuffer = gl.createBuffer();
-    if (!vertexBuffer) {
+    if (this.buffer === null) {
+      this.buffer = gl.createBuffer();
+      if (!vertexBuffer) {
         console.log("Failed to create the buffer object");
         return -1;
     }
+    }
 
-    gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
+    gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
 
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.DYNAMIC_DRAW);
 
